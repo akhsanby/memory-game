@@ -4,70 +4,8 @@ import * as solidIcons from "@fortawesome/free-solid-svg-icons";
 import * as regularIcons from "@fortawesome/free-regular-svg-icons";
 import * as brandsIcons from "@fortawesome/free-brands-svg-icons";
 
-const items = [
-  // {
-  //   name: "Ayaka",
-  //   image: "/images/Ayaka.png",
-  // },
-  // {
-  //   name: "Dehya",
-  //   image: "/images/Dehya.png",
-  // },
-  // {
-  //   name: "Eula",
-  //   image: "/images/Eula.png",
-  // },
-  // {
-  //   name: "Furina",
-  //   image: "/images/Furina.png",
-  // },
-  // {
-  //   name: "Ganyu",
-  //   image: "/images/Ganyu.png",
-  // },
-  // {
-  //   name: "Hutao",
-  //   image: "/images/Hutao.png",
-  // },
-  // {
-  //   name: "Kokomi",
-  //   image: "/images/Kokomi.png",
-  // },
-  // {
-  //   name: "Nahida",
-  //   image: "/images/Nahida.png",
-  // },
-  // {
-  //   name: "Navia",
-  //   image: "/images/Navia.png",
-  // },
-  // {
-  //   name: "Nilou",
-  //   image: "/images/Nilou.png",
-  // },
-  // {
-  //   name: "Shenhe",
-  //   image: "/images/Shenhe.png",
-  // },
-  // {
-  //   name: "Shougun",
-  //   image: "/images/Shougun.png",
-  // },
-  // {
-  //   name: "Yae",
-  //   image: "/images/Yae.png",
-  // },
-  // {
-  //   name: "Yelan",
-  //   image: "/images/Yelan.png",
-  // },
-  // {
-  //   name: "Yoimiya",
-  //   image: "/images/Yoimiya.png",
-  // },
-];
-
-const currentTime = ref();
+const items = [];
+const currentTime = ref(null);
 const resultTime = ref();
 const movesCount = ref(0);
 const matchCount = ref(0);
@@ -101,6 +39,7 @@ function timeGeneratorCustom(sec = 90) {
       clearInterval(intervalId);
       resultTime.value = null;
       cardValues.value = null;
+      currentTime.value = null;
     }
   }, 1000);
 }
@@ -155,7 +94,7 @@ function handleClick(e, cardName) {
         setTimeout(() => {
           tempFirst.classList.remove("flipped");
           tempSecond.classList.remove("flipped");
-        }, 600);
+        }, 550);
       }
       firstCard.value = false;
       secondCard.value = false;
@@ -176,20 +115,20 @@ onMounted(() => {
 <template>
   <div class="w-screen h-screen flex justify-center items-center">
     <div class="card bg-white shadow-xl rounded-xl">
-      <div v-if="currentTime >= 0 && cardValues" class="stats-container flex flex-col justify-center items-center mt-[1.2rem] font-semibold text-black">
+      <div v-if="currentTime" class="stats-container flex flex-col justify-center items-center mt-[1.2rem] font-semibold text-black">
         <div id="moves-count"><span>Moves:</span> {{ movesCount }}</div>
         <div id="time" class="text-xl">{{ resultTime }}</div>
       </div>
       <div class="card-body grid grid-cols-4 gap-3" id="game-container">
-        <div v-if="currentTime >= 0 && cardValues" v-for="card in cardValues" class="card-container card w-[6rem] h-[6rem]">
+        <div v-if="currentTime" v-for="card in cardValues" class="card-container cursor-pointer card w-[6rem] h-[6rem]">
           <div @click.self="(e) => handleClick(e, card.name)" class="card-before bg-warning rounded-xl border-4 border-black shadow-xl flex justify-center card-title text-[3rem] w-full h-full absolute backface-visibility-hidden text-black rotate-y-0">?</div>
           <div class="card-after bg-white rounded-xl border-4 border-black shadow-xl flex justify-center card-title text-[3rem] w-full h-full absolute backface-visibility-hidden text-black rotate-y-180">
             <font-awesome-icon :icon="[card.icon.prefix, card.icon.iconName]" />
           </div>
         </div>
-        <div v-else class="controls-container col-span-4 flex flex-col justify-center items-center space-y-4">
+        <div v-if="!currentTime" class="controls-container col-span-4 flex flex-col justify-center items-center space-y-4">
           <p class="text-black font-semibold text-xl">Welcome to Memory Game</p>
-          <button class="btn btn-warning" @click="startGame">Start Game</button>
+          <button class="btn btn-warning text-md font-semibold" @click="startGame">Start Game</button>
         </div>
       </div>
     </div>
